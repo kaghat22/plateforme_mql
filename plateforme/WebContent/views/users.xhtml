@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Plateforme MQL</title>
+</h:head>
+<h:body>
+	<h:form id="form">
+		<p:growl id="growl" showDetail="true" showSummary="false" life="6000"
+			sticky="false" />
+		<p:panel id="addPanel" header="Ajouter nouveau Utilisateur"
+			style="margin-bottom:10px;">
+
+			<h:panelGrid columns="2">
+				<p:outputLabel for="login" value="Nom d'utilisateur :" />
+				<p:inputText id="login" value="#{user.login}" size="40"
+					validatorMessage="Champs requis : login ">
+					<f:validateRequired />
+				</p:inputText>
+				<p:outputLabel for="password" value="Mot de passe :" />
+				<p:inputText id="password" value="#{user.password}" size="40"
+					validatorMessage="Champs requis : Mot de passe  ">
+					<f:validateRequired />
+				</p:inputText>
+			</h:panelGrid>
+		</p:panel>
+		<p:toolbar>
+			<f:facet name="left">
+				<p:commandButton value="Ajouter" icon="ui-icon-circle-check"
+					actionListener="#{userAction.addUser(user)}" update="form">
+				</p:commandButton>
+				<p:commandButton value="Annuler" type="reset"
+					icon="ui-icon-circle-minus">
+				</p:commandButton>
+			</f:facet>
+		</p:toolbar>
+
+		<p:panel id="listPanel" header="Liste des Utilisateurs"
+			style="margin-bottom:10px; margin-top:50px;">
+
+			<p:dataTable var="c" value="#{userAction.users}" paginator="true"
+				rowsPerPageTemplate="10,15,20" rows="15" emptyMessage="Aucun Utilisateur">
+				<p:column headerText="Nom d'utilisateur"
+					filterBy="#{c.login}" filterMatchMode="contains">
+					<h:outputText value="#{c.login}" />
+				</p:column>
+				<p:column headerText="Mot de passe" filterBy="#{c.password}"
+					filterMatchMode="contains">
+					<h:outputText value="#{c.password}"></h:outputText>
+				</p:column>
+				<p:column headerText="Options"
+					style="width:90px; text-align:  center">
+					<p:tooltip id="toolTipGrowD" for="remove" value="Supprimer"
+						showEffect="clip" hideEffect="clip" position="left" />
+					<p:tooltip id="toolTipGrowU" for="update" value="Modifier"
+						showEffect="clip" hideEffect="clip" position="left" />
+					<p:commandButton icon="ui-icon-closethick" update="form"
+						id="remove" action="#{userAction.removeUser(c)}" process="@this">
+						<p:confirm header="Confirmation"
+							message="voulez-vous supprimer l'utilisateur ?" icon="ui-icon-alert">
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade" severity="alert">
+
+								<p:commandButton value="Oui" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="Non" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</p:confirm>
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil" update=":form:userUpdate"
+						id="update" oncomplete="PF('userDialog').show()" process="@this"
+						action="#{userAction.setUserUpdate(c)}">
+
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+
+		<p:dialog header="Modifier Utilisateur" widgetVar="userDialog" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false" width="665">
+
+			<p:panel id="userUpdate" style="text-align:left;">
+				<p:panelGrid columns="2">
+					<p:outputLabel for="login2" value="Nom d'utilisateur :" />
+					<p:inputText id="login2" size="40"
+						value="#{userAction.userUpdate.login}">
+					</p:inputText>
+					<p:outputLabel for="password2" value="Mot de passe :" />
+					<p:inputText id="password2" size="40"
+						value="#{userAction.userUpdate.password}">
+					</p:inputText>
+
+				</p:panelGrid>
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Modifier"
+							action="#{userAction.updateUser(userAction.userUpdate)}"
+							update="form" icon="ui-icon-circle-check" process="userUpdate">
+							<p:confirm header="Confirmation"
+								message="voulez-vous appliquer la modification ?"
+								icon="ui-icon-alert" />
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Oui" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="Non" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</p:commandButton>
+						<p:commandButton value="Annuler" type="reset"
+							icon="ui-icon-circle-minus">
+
+						</p:commandButton>
+					</f:facet>
+				</p:toolbar>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+
+</h:body>
+</html>

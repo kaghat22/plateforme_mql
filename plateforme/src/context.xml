@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- Le bean du session factory  -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/mql" />
+		<property name="username" value="root"></property>
+		<property name="password" value=""></property>
+	    <property name="initialSize" value="3" />
+	    <property name="maxActive" value="10" />
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+	</bean>
+
+	<bean id="transactionManager"
+	    class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	    <property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+
+<!--  
+<bean id="sessionFactory" class="org.mql.plateforme.util.HibernateFactory" init-method="getSession">
+</bean>-->
+<!--linjection de dependance pour le service des evenements   -->
+<bean id="daoEvenement" class="org.mql.plateforme.doa.EvenementHibernateDao" init-method="msg">
+	<constructor-arg>
+	    <ref bean="sessionFactory" />
+	</constructor-arg>
+</bean>
+
+<bean id="serviceEvenement" class="org.mql.plateforme.business.EvenementDefaultService" init-method="msgV">
+	<property name="daoEve"  ref="daoEvenement"> </property>
+</bean>
+<!-- l'injectuon de dependance pour les service Galerie -->
+<bean id="daoGalerie" class="org.mql.plateforme.doa.GalerieHibernateDao">
+	<constructor-arg>
+	    <ref bean="sessionFactory" />
+	</constructor-arg>
+</bean>
+<bean id="serviceGalerie" class="org.mql.plateforme.business.GalerieDefautService">
+<property name="daoGa" ref="daoGalerie"></property>
+</bean>
+<!-- l'injectuon de dependance pour les service Utilisateur -->
+<bean id="daoUser" class="org.mql.plateforme.doa.UserHibernateDao">
+	<constructor-arg>
+	    <ref bean="sessionFactory" />
+	</constructor-arg>
+</bean>
+<bean id="serviceUser" class="org.mql.plateforme.business.UserDefaultService">
+	<property name="daoUs" ref="daoUser"></property>
+</bean>
+<!-- l'injectuon de dependance pour les service Participation -->
+<bean id="daoParticipation" class="org.mql.plateforme.doa.ParticipationHibernateDao">
+	<constructor-arg>
+	    <ref bean="sessionFactory" />
+	</constructor-arg>
+</bean>
+<bean id="serviceParticipation" class="org.mql.plateforme.business.ParticipationDefaultService">
+<property name="daoPa" ref="daoParticipation"></property>
+</bean>
+</beans>

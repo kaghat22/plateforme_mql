@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 29 oct. 2017 14:12:54 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.mql.plateforme.models.Article">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="titre" type="java.lang.String">
+            <column name="TITRE" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="imgPath" type="java.lang.String">
+            <column name="IMGPATH" />
+        </property>
+        <property name="lieu" type="java.lang.String">
+            <column name="LIEU" />
+        </property>
+        <property name="datePub" type="java.util.Date">
+            <column name="DATEPUB" />
+        </property>
+        <property name="dateModif" type="java.util.Date">
+            <column name="DATEMODIF" />
+        </property>
+       <property name="tags" type="java.lang.String">
+            <column name="TAGS" />
+        </property>
+        
+        
+        <union-subclass name="org.mql.plateforme.models.Evenement" table="Evenement">
+        
+        	<property name="dateEvent" type="java.util.Date">
+           		 <column name="DATEEVENT" />
+        	</property>
+        
+			<many-to-one name="cat" class="org.mql.plateforme.models.Categorie" 
+				column="idCat" />
+			<many-to-one name="visib" class="org.mql.plateforme.models.Visibilite" 
+				column="idVisibilite" />
+        	
+        </union-subclass>
+        
+          <union-subclass name="org.mql.plateforme.models.Galerie" table="GALERIE">
+         	
+        	<property name="documents" type="string">
+           		 <column name="DOCUMENTS" />
+        	</property>
+        	<property name="images" type="string">
+           		 <column name="IMAGES" />
+        	</property>
+        	<property name="videos" type="string">
+           		 <column name="VIDEOS" />
+        	</property>
+        </union-subclass>  
+        
+    </class>
+</hibernate-mapping>

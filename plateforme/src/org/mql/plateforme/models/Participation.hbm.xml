@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 29 oct. 2017 14:10:29 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.mql.plateforme.models.Participation" table="PARTICIPATION">
+        <id name="idParticip" type="int">
+            <column name="idP" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="evenement" class="org.mql.plateforme.models.Evenement" 
+				column="idEvent" />
+		<many-to-one name="user" class="org.mql.plateforme.models.Utilisateur" 
+				column="idUser" />
+      	
+    </class>
+</hibernate-mapping>
